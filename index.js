@@ -1,5 +1,6 @@
 const carReviews = [
   {
+    id: 1,
     image: "./assets/porsche.jpg",
     carName: "Porsche",
     reviewText: "The best car which I have",
@@ -8,6 +9,7 @@ const carReviews = [
     rating: 5,
   },
   {
+    id: 2,
     image: "./assets/ferrari.webp",
     carName: "Ferrari",
     reviewText: "A dream car for many!",
@@ -16,6 +18,7 @@ const carReviews = [
     rating: 4.8,
   },
   {
+    id: 3,
     image: "./assets/bmw.jpeg",
     carName: "BMW",
     reviewText: "Luxury and performance",
@@ -24,6 +27,7 @@ const carReviews = [
     rating: 4.7,
   },
   {
+    id: 4,
     image: "./assets/Mercedes.jpeg",
     carName: "Mercedes",
     reviewText: "Class and comfort",
@@ -32,6 +36,7 @@ const carReviews = [
     rating: 4.9,
   },
   {
+    id: 5,
     image: "./assets/range-rover.webp",
     carName: "Range Rover",
     reviewText: "Unmatched luxury and off-road capability",
@@ -40,6 +45,7 @@ const carReviews = [
     rating: 4.9,
   },
   {
+    id: 6,
     image: "./assets/zeekr.jpg",
     carName: "Zeekr",
     reviewText: "Innovative and electric",
@@ -48,6 +54,7 @@ const carReviews = [
     rating: 4.7,
   },
   {
+    id: 7,
     image: "./assets/tesla.jpg",
     carName: "Tesla",
     reviewText: "Future of electric cars",
@@ -56,6 +63,7 @@ const carReviews = [
     rating: 4.9,
   },
   {
+    id: 8,
     image: "./assets/audi.jpg",
     carName: "Audi",
     reviewText: "Elegant and powerful",
@@ -64,6 +72,7 @@ const carReviews = [
     rating: 4.6,
   },
   {
+    id: 9,
     image: "./assets/lamborghini.webp",
     carName: "Lamborghini",
     reviewText: "Speed and style",
@@ -72,6 +81,7 @@ const carReviews = [
     rating: 4.9,
   },
   {
+    id: 10,
     image: "./assets/jaquar.jpg",
     carName: "Jaguar",
     reviewText: "Refined performance",
@@ -80,6 +90,7 @@ const carReviews = [
     rating: 4.5,
   },
   {
+    id: 11,
     image: "./assets/lexus.jpg",
     carName: "Lexus",
     reviewText: "Luxury and technology",
@@ -88,6 +99,7 @@ const carReviews = [
     rating: 4.7,
   },
   {
+    id: 12,
     image: "./assets/maserati.jpg",
     carName: "Maserati",
     reviewText: "Italian excellence",
@@ -96,6 +108,7 @@ const carReviews = [
     rating: 4.8,
   },
   {
+    id: 13,
     image: "./assets/rollsroyce.avif",
     carName: "Rolls-Royce",
     reviewText: "The pinnacle of luxury",
@@ -104,6 +117,7 @@ const carReviews = [
     rating: 5,
   },
   {
+    id: 14,
     image: "./assets/bentley.webp",
     carName: "Bentley",
     reviewText: "Exquisite craftsmanship",
@@ -112,6 +126,7 @@ const carReviews = [
     rating: 4.8,
   },
   {
+    id: 15,
     image: "./assets/astonmartin.jpg",
     carName: "Aston Martin",
     reviewText: "Timeless elegance",
@@ -124,7 +139,8 @@ const carReviews = [
 const prevButton = document.querySelector("#prevButton");
 const nextButton = document.querySelector("#nextButton");
 const cardsContainer = document.querySelector("#cardsContainer");
-
+const modal = document.querySelector("#modal");
+const close = document.querySelector("#close");
 let currentIndex = 0;
 
 prevButton.addEventListener("click", handlePrev);
@@ -146,29 +162,72 @@ function handleNext() {
   start();
 }
 
+function handleClick(id) {
+  const selectedCar = carReviews.find((car) => car.id === id);
+  if (selectedCar) {
+    modalContent.innerHTML = `
+          <div class="p-4">
+          <button id="closeButton" class='w-[130px] py-2 bg-black text-white rounded-md'>Close</button>
+            <img src=${selectedCar.image} alt="${
+      selectedCar.carName
+    }" class="w-full h-[300px] object-contain mb-4" />
+            <h2 class="text-2xl font-bold">${selectedCar.carName}</h2>
+            <p class="text-lg mb-2">${selectedCar.reviewText}</p>
+            <p>${selectedCar.description}</p>
+            <div class="flex space-x-1 mt-2 text-yellow-500">
+              ${[...Array(Math.round(selectedCar.rating)).keys()]
+                .map(() => '<i class="fa-solid fa-star"></i>')
+                .join("")}
+            </div>
+          </div>
+        `;
+    modal.classList.remove("hidden");
+
+    document
+      .getElementById("closeButton")
+      .addEventListener("click", handleClose);
+  }
+}
+
+function handleClose() {
+  modal.classList.add("hidden");
+}
+
+function handleClose() {
+  modal.classList.add("hidden");
+}
+handleClose();
 function start() {
   cardsContainer.innerHTML = "";
   const reviewsToShow = carReviews.slice(currentIndex, currentIndex + 3);
   reviewsToShow.forEach((item) => {
     cardsContainer.innerHTML += `
-        <div class="w-[400px] h-[450px] bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105">
-          <div class="w-full h-[220px]">
-            <img src=${item.image} alt="${item.carName}" class="w-full h-full object-cover" />
-          </div>
-          <div class="flex flex-col justify-center items-center p-4">
-            <div class="flex space-x-1 mb-3 text-yellow-500">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
+          <div
+          onclick="handleClick(${item.id})"
+          class="w-[400px] h-[450px] bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105">
+            <div class="w-full h-[220px]">
+              <img src=${item.image} alt="${
+      item.carName
+    }" class="w-full h-full object-cover" />
             </div>
-            <p class="text-2xl font-bold mb-1 text-gray-800">${item.carName}</p>
-            <p class="text-lg font-semibold mb-2 text-gray-600 text-center">${item.reviewText}</p>
-            <p class="text-sm text-gray-500 text-center leading-tight">${item.description}</p>
+            <div class="flex flex-col justify-center items-center p-4">
+              <div class="flex space-x-1 mb-3 text-yellow-500">
+                ${[...Array(Math.round(item.rating)).keys()]
+                  .map(() => '<i class="fa-solid fa-star"></i>')
+                  .join("")}
+              </div>
+              <p class="text-2xl font-bold mb-1 text-gray-800">${
+                item.carName
+              }</p>
+              <p class="text-lg font-semibold mb-2 text-gray-600 text-center">${
+                item.reviewText
+              }</p>
+              <p class="text-sm text-gray-500 text-center leading-tight">${
+                item.description
+              }</p>
+            </div>
           </div>
-        </div>
-      `;
+        `;
   });
 }
 
